@@ -1,5 +1,7 @@
 # Todo
 
+<img width="1031" height="553" alt="Captura de tela de 2026-07-02 23-34-51" src="https://github.com/user-attachments/assets/fcbdca56-b576-4d80-9a41-3bedfc1052bc" />
+
 Aplicação de lista de tarefas simples construída com React + TypeScript e Vite.
 
 ## Visão Geral
