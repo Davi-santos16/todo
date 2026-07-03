@@ -1,73 +1,140 @@
-# React + TypeScript + Vite
+# Todo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação de lista de tarefas simples construída com React + TypeScript e Vite.
 
-Currently, two official plugins are available:
+## Visão Geral
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este projeto é um front-end para gerenciar tarefas (to‑do). Ele foca em uma arquitetura leve e componetizada usando hooks personalizados e armazenamento local para persistência das tarefas.
 
-## React Compiler
+Objetivos principais:
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- Fornecer uma UI enxuta para criar, marcar como concluída e remover tarefas.
+- Manter a lógica de estado separada em hooks reutilizáveis.
+- Ser um exemplo prático de organização de um app React moderno com TypeScript e Vite.
 
-## Expanding the ESLint configuration
+## Status
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Funcionalidades principais implementadas: criação, edição rápida, marcação como concluída, remoção e resumo de tarefas. Persistência via armazenamento local.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tecnologias
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js (recomendado >= 18)
+- pnpm (recomendado)
+- Vite
+- React 19
+- TypeScript
+- TailwindCSS
+- Dependências relevantes: `use-local-storage`, `class-variance-authority`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Instalação
+
+1. Instale dependências:
+
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Rodar em desenvolvimento:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+3. Build para produção:
+
+```bash
+pnpm build
+```
+
+4. Visualizar build localmente:
+
+```bash
+pnpm preview
+```
+
+5. Lint (ESLint):
+
+```bash
+pnpm lint
+```
+
+> Os scripts reais estão definidos em `package.json` (ex.: `dev`, `build`, `preview`, `lint`).
+
+## Estrutura do Projeto
+
+Raiz do `src/` com os principais diretórios:
+
+- `src/` — código-fonte principal
+  - `App.tsx` — entrada da aplicação
+  - `main.tsx` — bootstrap do React + Vite
+  - `index.css` — estilos globais (Tailwind)
+  - `assets/` — ícones e imagens
+  - `components/` — componentes UI reutilizáveis (botões, badges, inputs, skeletons, etc.)
+  - `core-components/` — componentes específicos da aplicação (header, footer, task list, task item, resumo)
+  - `helpers/` — utilitários (ex.: `utils.ts`)
+  - `hooks/` — hooks React personalizados (ex.: `use-task.ts`, `use-tasks.ts`)
+  - `models/` — tipos e interfaces (ex.: `task.ts`)
+  - `pages/` — layouts e páginas (ex.: `page-home.tsx`, `layout-main.tsx`)
+
+## Principais Módulos
+
+- `components/` — pequenos blocos de UI que devem ser independentes e reutilizáveis.
+- `core-components/` — composição de componentes para formar as views da aplicação (lista de tarefas, item de tarefa, sumário de tarefas, cabeçalho/rodapé).
+- `hooks/use-tasks.ts` — hook que gerencia a coleção de tarefas: adicionar, remover, atualizar e persistir no armazenamento local.
+- `hooks/use-task.ts` — hook para lógica centrada em uma única tarefa (validação, transformações, etc.).
+- `models/task.ts` — interface/shape do objeto `Task` usado pela app (por exemplo: id, title, completed, createdAt).
+- `helpers/utils.ts` — funções utilitárias usadas pela UI e hooks.
+
+## Persistência
+
+As tarefas são persistidas em armazenamento local do navegador (localStorage) via a dependência `use-local-storage` e pelos hooks em `hooks/`.
+
+## Como Funciona (fluxo básico)
+
+1. `App.tsx` renderiza o layout principal e injeta os `core-components`.
+2. O hook `use-tasks` carrega o estado inicial do `localStorage` e expõe funções para manipular tarefas.
+3. `task.list.tsx` consome o hook para listar tarefas e renderizar `task-item.tsx` para cada tarefa.
+4. A UI chama as funções do hook para adicionar, editar rápido, marcar concluída ou remover tarefas — o hook atualiza o armazenamento local automaticamente.
+
+## Extensões e Melhorias Sugeridas
+
+- Adicionar testes unitários (Jest/Testing Library) para hooks e componentes.
+- Suporte a filtros e ordenação avançada (por prioridade, data, tag).
+- Sincronização com backend (API REST/GraphQL) para multi-dispositivo.
+- Internacionalização (i18n) para suportar múltiplos idiomas.
+
+## Como Contribuir
+
+1. Abra uma issue descrevendo o problema ou feature.
+2. Crie um branch com um nome descritivo.
+3. Envie um pull request com uma descrição clara das mudanças.
+
+Checklist básico para PRs:
+
+- Código formatado e lintado (`pnpm lint`).
+- Mudanças documentadas no `README.md` quando relevante.
+- Testes adicionados quando aplicável.
+
+## Arquivos importantes
+
+- `package.json` — scripts e dependências
+- `vite.config.ts` — configurações do Vite
+- `tsconfig.json` / `tsconfig.app.json` — configurações TypeScript
+
+## Contato / Maintainer
+
+Mantenha as discussões e dúvidas no repositório (issues) ou contate o autor do projeto no canal apropriado.
+
+## Licença
+
+Este repositório não contém arquivo de licença por padrão. Recomenda-se adicionar uma licença (ex.: MIT) se for distribuir publicamente.
+
+---
+
+Se quiser, eu posso:
+
+- adicionar um arquivo `LICENSE` (ex.: MIT),
+- formatar e rodar o linter, ou
+- criar arquivos de exemplo ou badges no topo do `README.md`.
+
+
